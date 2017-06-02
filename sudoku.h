@@ -64,10 +64,81 @@ bool sudoku_esTableroValido(Tablero t);
  * - ninguna columna tiene un numero repetido
  * - ninguna de las 9 regiones tiene un numero repetido
  */
+
 bool sudoku_esFilaParcialmenteResuelto(Tablero t){
+	int result = 0;
+	for (i = 0; i < 9; i++){
+		int subArray[9];
+		for (j = 0; j < 9; j++){
+			subArray[j] = t[i][j];
+		}
+		result = result + noHayRepetidos(subArray);
+	}
+	return (result == 0);
+}
+
+
+bool sudoku_esFilaParcialmenteResuelto(Tablero t){
+	int result = 0;
+	for (j = 0; j < 9; j++){
+		int subArray[9];
+		for (i = 0; i < 9; i++){
+			subArray[i] = t[i][j];
+		}
+		result = result + noHayRepetidos(subArray);
+	}
+	return (result == 0);
+}
+
+
+int noHayRepetidos(int l[]){
+	int result = 0;
+	for (i = 0; i < 9; i++){
+		if (l(i) != 0){
+			for (j = 0; j < 9; j++){
+				if (i != j && l[i] == l[j]){
+					result++;
+				}
+			}
+		}
+	}
+	return result;
+}
+
+
+bool sudoku_esTableroTotalmenteResuelto(Tablero t);
+
+/**
+ * Indica que un tablero esta contendio en otro tablero.
+ * Es decir, toda celda definida del tablero t0 tiene el mismo valor en el tablero t2.
+ */
+bool sudoku_esSubTablero(Tablero t0, Tablero t1);
+
+/**
+ * Dado un tablero valido, retorna true si el tablero puede ser resuelto
+ * (y modifica el tablero con la solucion).
+ * Si el tablero no puede ser resuelto, retorna false y no modifica
+ * el tablero.
+ */
+bool sudoku_resolver(Tablero t);
+
+/**
+ * Idem a la operacion sudoku_resolver, pero almacena en count la cantidad de operaciones
+ * de vaciado y llenado de celdas.
+ */
+bool sudoku_resolver(Tablero t, int& count);
+
+/**
+ * Imprime el tablero actual por pantalla.
+ */
+void sudoku_print(Tablero t);
+
+#endif /* SUDOKU_H_ */
+
+/**bool sudoku_esFilaParcialmenteResuelto(Tablero t){
 	int i = 0;
 	int j = 0;
-	int c= 0;
+	int c = 0;
 	int x = 0;
 	while (i < 9){
 		while (j < 9){
@@ -100,6 +171,7 @@ bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
 	int x = 0;
 	while (j < 9){
 		while (i < 9){
+
 			if (t[i][j] != 0){
 				while (f < 9){
 					if (j != f){
@@ -121,32 +193,4 @@ bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
 	}
 	return x == 0;
 }
-
-bool sudoku_esTableroTotalmenteResuelto(Tablero t);
-
-/**
- * Indica que un tablero esta contendio en otro tablero.
- * Es decir, toda celda definida del tablero t0 tiene el mismo valor en el tablero t2.
- */
-bool sudoku_esSubTablero(Tablero t0, Tablero t1);
-
-/**
- * Dado un tablero valido, retorna true si el tablero puede ser resuelto
- * (y modifica el tablero con la solucion).
- * Si el tablero no puede ser resuelto, retorna false y no modifica
- * el tablero.
- */
-bool sudoku_resolver(Tablero t);
-
-/**
- * Idem a la operacion sudoku_resolver, pero almacena en count la cantidad de operaciones
- * de vaciado y llenado de celdas.
- */
-bool sudoku_resolver(Tablero t, int& count);
-
-/**
- * Imprime el tablero actual por pantalla.
- */
-void sudoku_print(Tablero t);
-
-#endif /* SUDOKU_H_ */
+*/
