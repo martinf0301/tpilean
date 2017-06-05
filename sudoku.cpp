@@ -209,6 +209,18 @@ bool sudoku_resolver(Tablero t) {
 	return false;
 }
 
+bool sudoku_resolver(Tablero t, int& count) {
+	// COMPLETAR
+	return false;
+}
+
+bool sudoku_resolver(Tablero t){
+	Tablero sudokus[1000];
+	sudokus[0] = t;
+	int count = 0;
+	sudoku_resolverAux(t, sudokus, count, count);
+}
+
 bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
@@ -228,18 +240,6 @@ bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
 			}
 		}
 	}
-}
-
-bool sudoku_resolver(Tablero t, int& count) {
-	// COMPLETAR
-	return false;
-}
-
-bool sudoku_resolver(Tablero t){
-	Tablero sudokus[1000];
-	sudokus[0] = t;
-	int count = 0;
-	sudoku_resolverAux(t, sudokus, count, count);
 }
 
 bool tableroNoRepetido(Tablero t, Tablero s[]){

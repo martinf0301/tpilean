@@ -101,6 +101,7 @@ bool tableroNoRepetido(Tablero t, Tablero s[]);
  * de vaciado y llenado de celdas.
  */
 bool sudoku_resolver(Tablero t, int& count);
+
 /**
  * Imprime el tablero actual por pantalla.
  */
