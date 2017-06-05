@@ -65,45 +65,13 @@ bool sudoku_esTableroValido(Tablero t);
  * - ninguna de las 9 regiones tiene un numero repetido
  */
 
-bool sudoku_esFilaParcialmenteResuelto(Tablero t){
-	int result = 0;
-	for (i = 0; i < 9; i++){
-		int subArray[9];
-		for (j = 0; j < 9; j++){
-			subArray[j] = t[i][j];
-		}
-		result = result + noHayRepetidos(subArray);
-	}
-	return (result == 0);
-}
+bool sudoku_esFilaParcialmenteResuelto(Tablero t);
 
 
-bool sudoku_esFilaParcialmenteResuelto(Tablero t){
-	int result = 0;
-	for (j = 0; j < 9; j++){
-		int subArray[9];
-		for (i = 0; i < 9; i++){
-			subArray[i] = t[i][j];
-		}
-		result = result + noHayRepetidos(subArray);
-	}
-	return (result == 0);
-}
+bool sudoku_esFilaParcialmenteResuelto(Tablero t);
 
 
-int noHayRepetidos(int l[]){
-	int result = 0;
-	for (i = 0; i < 9; i++){
-		if (l(i) != 0){
-			for (j = 0; j < 9; j++){
-				if (i != j && l[i] == l[j]){
-					result++;
-				}
-			}
-		}
-	}
-	return result;
-}
+int noHayRepetidos(int l[]);
 
 
 bool sudoku_esTableroTotalmenteResuelto(Tablero t);
@@ -120,52 +88,19 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1);
  * Si el tablero no puede ser resuelto, retorna false y no modifica
  * el tablero.
  */
-bool sudoku_resolver(Tablero t){
-	Tablero sudokus[1000];
-	sudokus[0] = t;
-	int count = 0;
-	sudoku_resolverAux(t, sudokus, count, count);
-}
+bool sudoku_resolver(Tablero t);
 
 
-bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
-	for (int i = 0; i < 9; i++){
-		for (int j = 0; j < 9; j++){
-			if (t[i][j] == 0){
-				for (int x = 1; x < 10; x++){
-					sudoku_llenarCelda(t, i, j, x);
-					if (sudoku_esTableroParcialmenteResuelto(t) && tableroNoRepetido(t, sudokus)){
-						count1++;
-						sudokus[count1] = t;
-						count2 = count1;
-						break;
-					}
-					if (x == 9){
-						sudoku_resolverAux(sudokus[count2 - 1], sudokus, count1, count2 - 1);
-					}
-				}
-			}
-		}
-	}
-}
+bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2);
 
 
-bool tableroNoRepetido(Tablero t, Tablero s[]){
-	int result = 0;
-	for (int i = 0; i < sizeof(s); i++){
-		if (sudoku_esSubTablero(t, s[i])){
-			result++;
-		}
-	}
-	return result == 0;
-}
+bool tableroNoRepetido(Tablero t, Tablero s[]);
 
 /**
  * Idem a la operacion sudoku_resolver, pero almacena en count la cantidad de operaciones
  * de vaciado y llenado de celdas.
  */
 bool sudoku_resolver(Tablero t, int& count);
-
 /**
  * Imprime el tablero actual por pantalla.
  */
