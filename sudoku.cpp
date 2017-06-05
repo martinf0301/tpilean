@@ -90,11 +90,11 @@ int sudoku_valorEnCelda(Tablero t, int f, int c) {
 	return t[f][c];
 }
 
-void sudoku_llenarCelda(Tablero t, int f, int c, int v) {
+void sudoku_llenarCelda(Tablero& t, int f, int c, int v) {
 	t[f][c] = v;
 }
 
-void sudoku_vaciarCelda(Tablero t, int f, int c) {
+void sudoku_vaciarCelda(Tablero& t, int f, int c) {
 	t[f][c] = 0;
 }
 
