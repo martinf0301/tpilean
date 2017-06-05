@@ -171,22 +171,22 @@ int cantidadRepetidos(int l[]){
 	return result;
 }
 
-int sudoku_cantidadRepetidosRegion(int arr[]) {
-	int i = 0;
-	int j = 0;
-	int res = 0;
-	while(i < 9) {
-		while(j < 9) {
-			if(arr[i] == arr[j]) {
-				res++;
-			}
-			j++;
-		}
-		i++;
-
-	}
-	return res;
-}
+// int sudoku_cantidadRepetidosRegion(int arr[]) {
+// 	int i = 0;
+// 	int j = 0;
+// 	int res = 0;
+// 	while(i < 9) {
+// 		while(j < 9) {
+// 			if(arr[i] == arr[j]) {
+// 				res++;
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+//
+// 	}
+// 	return res;
+// }
 
 bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
 	// COMPLETAR
@@ -194,12 +194,6 @@ bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
 }
 
 bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
-	// COMPLETAR
-	return false;
-}
-
-
-bool sudoku_resolver(Tablero t) {
 	// COMPLETAR
 	return false;
 }
