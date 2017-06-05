@@ -131,7 +131,7 @@ bool sudoku_esFilaParcialmenteResuelto(Tablero t){
 	return (result == 0);
 }
 
-bool sudoku_esFilaParcialmenteResuelto(Tablero t){
+bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
 	int result = 0;
 	for (j = 0; j < 9; j++){
 		int subArray[9];
