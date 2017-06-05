@@ -121,31 +121,26 @@ bool sudoku_esTableroParcialmenteResuelto(Tablero t) {
 
 bool sudoku_esFilaParcialmenteResuelto(Tablero t){
 	int result = 0;
-	for (i = 0; i < 9; i++){
-		int subArray[9];
-		for (j = 0; j < 9; j++){
-			subArray[j] = t[i][j];
-		}
-		result = result + noHayRepetidos(subArray);
+	for (int i = 0; i < 9; i++){
+		result = result + cantidadRepetidos(t[i]);
 	}
 	return (result == 0);
 }
 
 bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
 	int result = 0;
-	for (j = 0; j < 9; j++){
+	for (int j = 0; j < 9; j++){
 		int subArray[9];
-		for (i = 0; i < 9; i++){
+		for (int i = 0; i < 9; i++){
 			subArray[i] = t[i][j];
 		}
-		result = result + noHayRepetidos(subArray);
+		result = result + cantidadRepetidos(subArray);
 	}
 	return (result == 0);
 }
 
 bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 	int result = 0;
-
 	for(int i = 0; i < 9; i = i + 3) {
 		for(int j = 0; j < 9; j = j + 3) {
 			int subArray[9];
@@ -156,17 +151,17 @@ bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 					pos++;
 				}
 			}
-			result += sudoku_cantidadRepetidosRegion(subArray);
+			result += cantidadRepetidos(subArray);
 		}
 	}
 	return result;
 }
 
-int noHayRepetidos(int l[]){
+int cantidadRepetidos(int l[]){
 	int result = 0;
-	for (i = 0; i < 9; i++){
-		if (l(i) != 0){
-			for (j = 0; j < 9; j++){
+	for (int i = 0; i < 9; i++){
+		if (l[i] != 0){
+			for (int j = 0; j < 9; j++){
 				if (i != j && l[i] == l[j]){
 					result++;
 				}

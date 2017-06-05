@@ -71,7 +71,7 @@ bool sudoku_esFilaParcialmenteResuelto(Tablero t);
 bool sudoku_esColumnaParcialmenteResuelto(Tablero t);
 
 
-int noHayRepetidos(int l[]);
+int cantidadRepetidos(int l[]);
 
 
 bool sudoku_esTableroTotalmenteResuelto(Tablero t);
