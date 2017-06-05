@@ -74,6 +74,7 @@ TEST(SudokuTests, llenarCeldaNoVacia) {
 	Tablero t;
 	sudoku_vaciarTablero(t);
 	sudoku_llenarCelda(t,4,4,5);
+	sudoku_vaciarCelda(t,4,4);
 	sudoku_llenarCelda(t,4,4,7);
 	int rv = sudoku_valorEnCelda(t,4,4);
 	ASSERT_EQ(7,rv);
@@ -165,6 +166,7 @@ TEST(SudokuTests, cantOperaciones){
 	bool resolver0= sudoku_resolver(t, nroOperaciones);
 	ASSERT_EQ(true, resolver0);
 	ASSERT_LT(0, nroOperaciones);
+	nroOperaciones = 0;
 	bool resolver1= sudoku_resolver(t, nroOperaciones);
 	ASSERT_EQ(true, resolver1);
 	ASSERT_EQ(0, nroOperaciones);
