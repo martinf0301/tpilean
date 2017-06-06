@@ -65,16 +65,19 @@ bool sudoku_esTableroValido(Tablero t);
  * - ninguna de las 9 regiones tiene un numero repetido
  */
 
-bool sudoku_esFilaParcialmenteResuelto(Tablero t);
+bool sudoku_esTableroParcialmenteResuelto(Tablero t);
 
+bool sudoku_esFilaParcialmenteResuelto(Tablero t);
 
 bool sudoku_esColumnaParcialmenteResuelto(Tablero t);
 
+bool sudoku_sonRegionesParcialmenteResueltas(Tablero t);
 
 int cantidadRepetidos(int l[]);
 
-
 bool sudoku_esTableroTotalmenteResuelto(Tablero t);
+
+bool sudoku_noHayCeldasVacias(Tablero t);
 
 /**
  * Indica que un tablero esta contendio en otro tablero.
@@ -88,14 +91,13 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1);
  * Si el tablero no puede ser resuelto, retorna false y no modifica
  * el tablero.
  */
-bool sudoku_resolver(Tablero t);
+bool sudoku_resolver(Tablero& t);
 
-
-bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2);
-
+bool sudoku_resolverAux(Tablero& t, Tablero& sudokus[], int& count1, int& count2);
 
 bool tableroNoRepetido(Tablero t, Tablero s[]);
 
+void copiarTablero(Tablero t, Tablero& s);
 /**
  * Idem a la operacion sudoku_resolver, pero almacena en count la cantidad de operaciones
  * de vaciado y llenado de celdas.
@@ -108,63 +110,3 @@ bool sudoku_resolver(Tablero t, int& count);
 void sudoku_print(Tablero t);
 
 #endif /* SUDOKU_H_ */
-
-/**bool sudoku_esFilaParcialmenteResuelto(Tablero t){
-	int i = 0;
-	int j = 0;
-	int c = 0;
-	int x = 0;
-	while (i < 9){
-		while (j < 9){
-			if (t[i][j] != 0){
-				while (c < 9){
-					if (j != c){
-						if (t[i][j] == t[i][c]){
-							x++;
-							c++;
-						}
-						else {
-							c++;
-						}
-					}
-				}
-			}
-			else{
-				j++;
-			}
-		}
-		i++;
-	}
-	return x == 0;
-}
-
-bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
-	int i = 0;
-	int j = 0;
-	int f = 0;
-	int x = 0;
-	while (j < 9){
-		while (i < 9){
-
-			if (t[i][j] != 0){
-				while (f < 9){
-					if (j != f){
-						if (t[i][j] == t[f][j]){
-							x++;
-							f++;
-						}
-						else {
-							f++;
-						}
-					}
-				}
-			}
-			else{
-				i++;
-			}
-		}
-		j++;
-	}
-	return x == 0;
-}
-*/

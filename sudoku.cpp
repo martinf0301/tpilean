@@ -115,14 +115,15 @@ bool sudoku_esTableroValido(Tablero t) {
 }
 
 bool sudoku_esTableroParcialmenteResuelto(Tablero t) {
-	// COMPLETAR
-	return false;
+	return (sudoku_esTableroValido(t) && sudoku_esFilaParcialmenteResuelto(t) && sudoku_esColumnaParcialmenteResuelto(t) && sudoku_sonRegionesParcialmenteResueltas(t));
 }
+
+// start funciones auxiliares para esTableroParcialmenteResuelto
 
 bool sudoku_esFilaParcialmenteResuelto(Tablero t){
 	int result = 0;
 	for (int i = 0; i < 9; i++){
-		result = result + cantidadRepetidos(t[i]);
+		result += cantidadRepetidos(t[i]);
 	}
 	return (result == 0);
 }
@@ -134,7 +135,7 @@ bool sudoku_esColumnaParcialmenteResuelto(Tablero t){
 		for (int i = 0; i < 9; i++){
 			subArray[i] = t[i][j];
 		}
-		result = result + cantidadRepetidos(subArray);
+		result += cantidadRepetidos(subArray);
 	}
 	return (result == 0);
 }
@@ -154,7 +155,7 @@ bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 			result += cantidadRepetidos(subArray);
 		}
 	}
-	return result;
+	return (result == 0);
 }
 
 int cantidadRepetidos(int l[]){
@@ -171,46 +172,51 @@ int cantidadRepetidos(int l[]){
 	return result;
 }
 
-// int sudoku_cantidadRepetidosRegion(int arr[]) {
-// 	int i = 0;
-// 	int j = 0;
-// 	int res = 0;
-// 	while(i < 9) {
-// 		while(j < 9) {
-// 			if(arr[i] == arr[j]) {
-// 				res++;
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-//
-// 	}
-// 	return res;
-// }
+//end funciones auxiliares para esTableroParcialmenteResuelto
 
 bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
-	// COMPLETAR
-	return false;
+	return (sudoku_esTableroParcialmenteResuelto(t) && sudoku_noHayCeldasVacias(t));
 }
+//start funciones auxiliares para esTableroTotalmenteResuelto
+
+bool sudoku_noHayCeldasVacias(Tablero t) {
+	int counter = 0;
+	for(int i = 0; i < 9 && counter == 0; i++) {
+		for(int j = 0; j < 9 && counter == 0; j++) {
+			if(t[i][j] == 0) {
+				counter++;
+			}
+		}
+	}
+	return counter == 0;
+}
+
+//end funciones auxiliares para esTableroTotalmenteResuelto
 
 bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
-	// COMPLETAR
-	return false;
+	int soyCero = 0;
+	for(int i = 0; i < 9 && soyCero == 0; i++) {
+		for(int j = 0; j < 9 && soyCero == 0; j++) {
+			if(t0[i][j] != 0 && t0[i][j] != t1[i][j]) {
+				soyCero++;
+			}
+		}
+	}
+	return soyCero == 0;
 }
 
-bool sudoku_resolver(Tablero t, int& count) {
-	// COMPLETAR
-	return false;
-}
-
-bool sudoku_resolver(Tablero t){
-	Tablero sudokus[1000];
-	sudokus[0] = t;
+bool sudoku_resolver(Tablero& t){
+    Tablero sudokus[1000];
+    copiarTablero(t, sudokus[0]);
 	int count = 0;
 	sudoku_resolverAux(t, sudokus, count, count);
+	return sudoku_resolverAux(t, sudokus, count, count);
 }
 
-bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
+//start funciones auxiliares para resolver
+
+bool sudoku_resolverAux(Tablero& t, Tablero& sudokus[], int& count1, int& count2){
+	bool result = true;
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
 			if (t[i][j] == 0){
@@ -218,17 +224,24 @@ bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
 					sudoku_llenarCelda(t, i, j, x);
 					if (sudoku_esTableroParcialmenteResuelto(t) && tableroNoRepetido(t, sudokus)){
 						count1++;
-						sudokus[count1] = t;
+						copiarTablero(t, sudokus[count1]);
 						count2 = count1;
 						break;
 					}
 					if (x == 9){
+						if (count2 == 0){
+							result = false;
+							break;
+						}
+						else{
 						sudoku_resolverAux(sudokus[count2 - 1], sudokus, count1, count2 - 1);
+						}
 					}
 				}
 			}
 		}
 	}
+	return true;
 }
 
 bool tableroNoRepetido(Tablero t, Tablero s[]){
@@ -240,3 +253,18 @@ bool tableroNoRepetido(Tablero t, Tablero s[]){
 	}
 	return result == 0;
 }
+
+void copiarTablero(Tablero t, Tablero& s){
+	for (int i = 0; i < 9; i++){
+		for (int j = 0; j < 9; j++){
+			s[i][j] = t[i][j];
+		}
+	}
+}
+
+//end funciones auxiliares para resolver
+
+bool sudoku_resolver(Tablero t, int& count){
+	return false;
+}
+
