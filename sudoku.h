@@ -40,7 +40,7 @@ int sudoku_valorEnCelda(Tablero t, int f, int c);
 /**
  * Actualiza el valor de la celda en la posicion <f,c>
  */
-void sudoku_llenarCelda(Tablero t, int f, int c, int v);
+void sudoku_llenarCelda(Tablero& t, int f, int c, int v);
 
 /**
  * Elimina el valor de la celda en la posicion <f,c>.
@@ -93,7 +93,7 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1);
  */
 bool sudoku_resolver(Tablero& t);
 
-bool sudoku_resolverAux(Tablero& t, Tablero& sudokus[], int& count1, int& count2);
+bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& count2);
 
 bool tableroNoRepetido(Tablero t, Tablero s[]);
 

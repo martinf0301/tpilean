@@ -215,7 +215,7 @@ bool sudoku_resolver(Tablero& t){
 
 //start funciones auxiliares para resolver
 
-bool sudoku_resolverAux(Tablero& t, Tablero& sudokus[], int& count1, int& count2){
+bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& count2){
 	bool result = true;
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
