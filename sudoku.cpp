@@ -229,6 +229,7 @@ bool sudoku_resolverAux(Tablero t, Tablero sudokus[], int count1, int count2){
 			}
 		}
 	}
+	return 0;
 }
 
 bool tableroNoRepetido(Tablero t, Tablero s[]){
