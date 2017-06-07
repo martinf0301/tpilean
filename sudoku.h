@@ -14,7 +14,7 @@ bool sudoku_esCeldaVacia(Tablero t, int f, int c);
 /**
  * Elimina todas las celdas del tablero.
  */
-void sudoku_vaciarTablero(Tablero t);
+void sudoku_vaciarTablero(Tablero &t);
 
 /**
  * Retorna la cantidad de celdas vacias
@@ -81,7 +81,7 @@ bool sudoku_noHayCeldasVacias(Tablero t);
 
 /**
  * Indica que un tablero esta contendio en otro tablero.
- * Es decir, toda celda definida del tablero t0 tiene el mismo valor en el tablero t2.
+ * Es decir, toda celda definida del tablero t0 tiene el mismo valor en el tablero t1.
  */
 bool sudoku_esSubTablero(Tablero t0, Tablero t1);
 
@@ -93,7 +93,7 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1);
  */
 bool sudoku_resolver(Tablero& t);
 
-bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& count2);
+bool sudoku_resolverAux(Tablero& t, Tablero sudokus[], int& count1, int& count2);
 
 bool tableroNoRepetido(Tablero t, Tablero s[]);
 

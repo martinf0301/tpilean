@@ -30,60 +30,51 @@ bool sudoku_esCeldaVacia(Tablero t, int f, int c) {
 	return t[f][c] == 0;
 }
 
-void sudoku_vaciarTablero(Tablero t) {
-	int i = 0;
-	int j = 0;
-	while (i < 9) {
-		while(j < 9) {
+void sudoku_vaciarTablero(Tablero &t) {
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
 			t[i][j] = 0;
-			j++;
 		}
-		i++;
 	}
 }
 
 int sudoku_nroDeCeldasVacias(Tablero t) {
-	int i = 0;
-	int j = 0;
-	int acum = 0;
-	while (i < 9) {
-		while (j < 9) {
-			if (t[i][j] == 0) {
-				acum++;
-			}
-			j++;
-		}
-		i++;
-	}
-	return acum;
+  int total = 0;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (t[i][j] == 0) {
+        total++;
+      }
+    }
+  }
+  return total;
+}
+
+int * primerCeldaVacia(Tablero t) {
+  static int celda [2] = {0,0};
+  bool primera = true;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (t[i][j] == 0 && primera == true) {
+        celda[0] = i;
+        celda[1] = j;
+        primera = false;
+      }
+    }
+  }
+  return celda;
 }
 
 int sudoku_primerCeldaVaciaFila(Tablero t) {
-	int i = 0;
-	int j = 0;
-	bool lean = false;
-	while(i < 9 && lean == false) {
-		while(j < 9 && lean == false) {
-			if (t[i][j] == 0) {
-				lean = true;
-			}
-		}
-	}
-	return i;
+	int *fila;
+  fila = primerCeldaVacia(t);
+  return fila[0];
 }
 
 int sudoku_primerCeldaVaciaColumna(Tablero t) {
-	int i = 0;
-	int j = 0;
-	bool lean = false;
-	while(i < 9 && lean == false) {
-		while(j < 9 && lean == false) {
-			if (t[i][j] == 0) {
-				lean = true;
-			}
-		}
-	}
-	return j;
+	int *columna;
+  columna = primerCeldaVacia(t);
+  return columna[1];
 }
 
 int sudoku_valorEnCelda(Tablero t, int f, int c) {
@@ -99,26 +90,32 @@ void sudoku_vaciarCelda(Tablero& t, int f, int c) {
 }
 
 bool sudoku_esTableroValido(Tablero t) {
-	int i = 0;
-	int j = 0;
-	int soyCero = 0;
-	while(i < 9) {
-		while(j < 9) {
-			if (t[i][j] > 9) {
-				soyCero++;
-			}
-			j++;
-		}
-		i++;
+  bool valido = true;
+	for (int i = 0; i < 9; i++) {
+	  for (int j = 0; j < 9; j++) {
+	    if (t[i][j] > 9) {
+	      valido = false;
+	    }
+	  }
 	}
-	return soyCero == 0;
+	return valido;
 }
 
-bool sudoku_esTableroParcialmenteResuelto(Tablero t) {
-	return (sudoku_esTableroValido(t) && sudoku_esFilaParcialmenteResuelto(t) && sudoku_esColumnaParcialmenteResuelto(t) && sudoku_sonRegionesParcialmenteResueltas(t));
-}
+//start funciones para esTableroParcialmenteResuelto
 
-// start funciones auxiliares para esTableroParcialmenteResuelto
+int cantidadRepetidos(int l[]){
+	int result = 0;
+	for (int i = 0; i < 9; i++){
+		if (l[i] != 0){
+			for (int j = 0; j < 9; j++){
+				if (i != j && l[i] == l[j]){
+					result++;
+				}
+			}
+		}
+	}
+	return result;
+}
 
 bool sudoku_esFilaParcialmenteResuelto(Tablero t){
 	int result = 0;
@@ -147,7 +144,7 @@ bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 			int subArray[9];
 			int pos = 0;
 			for(int k = i; k < i + 3; k++) {
-				for(int l = k; l < k + 3; l++) {
+				for(int l = j; l < j + 3; l++) {
 					subArray[pos] = t[k][l];
 					pos++;
 				}
@@ -158,25 +155,15 @@ bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 	return (result == 0);
 }
 
-int cantidadRepetidos(int l[]){
-	int result = 0;
-	for (int i = 0; i < 9; i++){
-		if (l[i] != 0){
-			for (int j = 0; j < 9; j++){
-				if (i != j && l[i] == l[j]){
-					result++;
-				}
-			}
-		}
-	}
-	return result;
+bool sudoku_esTableroParcialmenteResuelto(Tablero t) {
+	return (sudoku_esTableroValido(t) &&
+          sudoku_esFilaParcialmenteResuelto(t) &&
+          sudoku_esColumnaParcialmenteResuelto(t) &&
+          sudoku_sonRegionesParcialmenteResueltas(t));
 }
 
 //end funciones auxiliares para esTableroParcialmenteResuelto
 
-bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
-	return (sudoku_esTableroParcialmenteResuelto(t) && sudoku_noHayCeldasVacias(t));
-}
 //start funciones auxiliares para esTableroTotalmenteResuelto
 
 bool sudoku_noHayCeldasVacias(Tablero t) {
@@ -191,31 +178,36 @@ bool sudoku_noHayCeldasVacias(Tablero t) {
 	return counter == 0;
 }
 
+bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
+	return (sudoku_esTableroParcialmenteResuelto(t) && sudoku_noHayCeldasVacias(t));
+}
+
 //end funciones auxiliares para esTableroTotalmenteResuelto
 
 bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
-	int soyCero = 0;
-	for(int i = 0; i < 9 && soyCero == 0; i++) {
-		for(int j = 0; j < 9 && soyCero == 0; j++) {
-			if(t0[i][j] != 0 && t0[i][j] != t1[i][j]) {
-				soyCero++;
+	int esSubTablero = true;
+	for(int i = 0; i < 9 && esSubTablero; i++){
+		for(int j = 0; j < 9 && esSubTablero; j++){
+			if(t0[i][j] != 0 && (t0[i][j] != t1[i][j])){
+				esSubTablero = false;
 			}
 		}
 	}
-	return soyCero == 0;
+	return esSubTablero;
 }
 
 bool sudoku_resolver(Tablero& t){
     Tablero sudokus[1000];
     copiarTablero(t, sudokus[0]);
-	int count = 0;
-	sudoku_resolverAux(t, sudokus, count, count);
-	return sudoku_resolverAux(t, sudokus, count, count);
+	int count1 = 0;
+	int count2 = 0;
+	sudoku_resolverAux(t, sudokus, count1, count2);
+	return sudoku_resolverAux(t, sudokus, count1, count2);
 }
 
 //start funciones auxiliares para resolver
 
-bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& count2){
+bool sudoku_resolverAux(Tablero& t, Tablero sudokus[], int& count1, int& count2){
 	bool result = true;
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
@@ -232,9 +224,8 @@ bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& coun
 						if (count2 == 0){
 							result = false;
 							break;
-						}
-						else{
-						sudoku_resolverAux(sudokus[count2 - 1], sudokus, count1, count2 - 1);
+						} else {
+						sudoku_resolverAux(sudokus[(count2 - 1)], sudokus, count1, count2 - 1);
 						}
 					}
 				}
@@ -246,7 +237,7 @@ bool sudoku_resolverAux(Tablero& t, Tablero (&sudokus)[], int& count1, int& coun
 
 bool tableroNoRepetido(Tablero t, Tablero s[]){
 	int result = 0;
-	for (int i = 0; i < sizeof(s); i++){
+	for (int i = 0; i < 1000; i++){
 		if (sudoku_esSubTablero(t, s[i])){
 			result++;
 		}
@@ -264,7 +255,7 @@ void copiarTablero(Tablero t, Tablero& s){
 
 //end funciones auxiliares para resolver
 
-bool sudoku_resolver(Tablero t, int& count){
-	return false;
-}
+//bool sudoku_resolver(Tablero t, int& count){
+//	return false;
+//}
 
