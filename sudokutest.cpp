@@ -81,11 +81,11 @@ int sudoku_valorEnCelda(Tablero t, int f, int c) {
 	return t[f][c];
 }
 
-void sudoku_llenarCelda(Tablero& t, int f, int c, int v) {
+void sudoku_llenarCelda(Tablero t, int f, int c, int v) {
 	t[f][c] = v;
 }
 
-void sudoku_vaciarCelda(Tablero& t, int f, int c) {
+void sudoku_vaciarCelda(Tablero t, int f, int c) {
 	t[f][c] = 0;
 }
 
@@ -179,15 +179,15 @@ bool sudoku_esTableroTotalmenteResuelto(Tablero t) {
 }
 
 bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
-	int esSubTablero = true;
-	for(int i = 0; i < 9 && esSubTablero; i++){
-		for(int j = 0; j < 9 && esSubTablero; j++){
+	int celdasDiferentes = 0;
+	for(int i = 0; i < 9 && celdasDiferentes == 0; i++){
+		for(int j = 0; j < 9 && celdasDiferentes == 0; j++){
 			if(t0[i][j] != 0 && (t0[i][j] != t1[i][j])){
-				esSubTablero = false;
+				celdasDiferentes++;
 			}
 		}
 	}
-	return esSubTablero;
+	return celdasDiferentes == 0;
 }
 
 void copiarTablero(Tablero t, Tablero& s){
@@ -198,50 +198,65 @@ void copiarTablero(Tablero t, Tablero& s){
 	}
 }
 
+bool resolviendo(Tablero t){
+
+		if (sudoku_esTableroTotalmenteResuelto(t))
+			return true;
+		if (sudoku_esTableroParcialmenteResuelto(t) != true)
+			return false;
+
+		for (int f = 0; f < 9; f++) {
+			for (int c = 0; c < 9; c++) {
+				if (t[f][c] == 0) {
+					for (int v = 1; v < 10; v++) {
+						sudoku_llenarCelda(t, f, c, v);
+						if (resolviendo(t) == true) {
+							return true;
+						} else {
+							sudoku_vaciarCelda(t, f, c);
+						}
+					}
+				}
+			}
+		}
+		return sudoku_esTableroTotalmenteResuelto(t);
+}
+
+bool sudoku_resolver(Tablero &t){
+	Tablero tableroTemp;
+	copiarTablero(t,tableroTemp);
+	resolviendo(t);
+	if (resolviendo(t) == false)
+		copiarTablero(tableroTemp, t);
+
+	return (sudoku_esTableroTotalmenteResuelto(t));
+}
+
 int main(int argc, char const *argv[]) {
 
-  Tablero test1 = {{8,0,0,4,1,6,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0},
-                  {0,0,0,0,0,0,0,0,0}};
+	Tablero test2 =  {{8,3,5,4,1,6,9,2,7},
+ 									{2,9,6,8,5,7,4,3,1},
+ 									{4,1,7,2,9,3,6,5,8},
+ 									{5,6,9,1,3,4,7,8,2},
+ 									{1,2,3,6,7,8,5,4,9},
+ 									{7,4,8,5,2,9,1,6,3},
+ 									{6,5,2,7,8,1,3,9,4},
+ 									{9,8,1,3,4,5,2,7,6},
+ 									{3,7,4,9,6,2,8,1,5}};
 
-  Tablero test =  {{8,3,5,4,1,6,9,2,7},
-                  {2,9,6,8,5,7,4,3,1},
-                  {4,1,7,2,9,3,6,5,8},
-                  {5,6,9,1,3,4,7,8,2},
-                  {1,2,3,6,7,8,5,4,9},
-                  {7,4,8,5,2,9,1,6,3},
-                  {6,5,2,7,8,1,3,9,4},
-                  {9,8,1,3,4,5,2,7,6},
-                  {3,7,4,9,6,2,8,1,5}};
+  Tablero test =  {{0,0,5,4,1,6,9,2,7},
+ 									{2,9,6,8,5,7,4,3,1},
+ 									{0,1,7,2,9,3,6,5,8},
+ 									{5,6,0,1,3,4,0,8,2},
+ 									{1,2,3,6,7,8,5,4,9},
+ 									{7,4,8,0,2,9,1,6,3},
+ 									{6,5,0,7,8,1,3,0,4},
+ 									{9,8,1,3,4,5,2,0,6},
+ 									{0,7,4,9,6,2,8,1,5}};
 
-  sudoku_print(test);
-  cout << "hola" << endl;
-  cout << sudoku_esCeldaVacia(test, 0, 0) << endl;
-  cout << sudoku_esCeldaVacia(test, 8, 7) << endl;
-  cout << sudoku_nroDeCeldasVacias(test) << endl;
-  std::cout << "Es valido? " << sudoku_esTableroValido(test) << '\n';
-  cout << "Primera celda vacia fila: " << sudoku_primerCeldaVaciaFila(test) << endl;
-  cout << "Primera celda vacia columna: " << sudoku_primerCeldaVaciaColumna(test) << endl;
-  std::cout << "Valor en celda " << sudoku_valorEnCelda(test,8,0) << '\n';
-  std::cout << "Es Parcialmente resuelto? " << sudoku_esTableroParcialmenteResuelto(test) << '\n';
-  std::cout << "Columna resuelta????" << sudoku_esColumnaParcialmenteResuelto(test) << '\n';
-  std::cout << "Es totalmente resuelto?? " << sudoku_esTableroTotalmenteResuelto(test) << '\n';
-  std::cout << "Es subtablero ? " << sudoku_esSubTablero(test1,test) << '\n';
-  copiarTablero(test, test1);
-  sudoku_vaciarTablero(test);
-  sudoku_llenarCelda(test,5,3,4);
-  sudoku_vaciarCelda(test1,5,3);
-  sudoku_print(test);
-  sudoku_print(test1);
-
-  std::cout << "Es valido? " << sudoku_esTableroValido(test) << '\n';
-  std::cout << "Es Parcialmente resuelto? " << sudoku_esTableroParcialmenteResuelto(test) << '\n';
-  cout << sudoku_nroDeCeldasVacias(test) << endl;
+	sudoku_print(test);
+	sudoku_resolver(test);
+	std::cout << "" << '\n';
+	sudoku_print(test);
   return 0;
 }
