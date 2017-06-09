@@ -98,6 +98,7 @@ TEST(SudokuTests, tableroSinCeldasVacias) {
 	ASSERT_EQ(0, celdas_vacias_rv);
 	int primer_celda_vacia_fila_rv = sudoku_primerCeldaVaciaFila(t);
 	int primer_celda_vacia_columna_rv = sudoku_primerCeldaVaciaColumna(t);
+	sudoku_print(t);
 	ASSERT_EQ(-1, primer_celda_vacia_fila_rv);
 	ASSERT_EQ(-1, primer_celda_vacia_columna_rv);
 }

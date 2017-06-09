@@ -30,7 +30,8 @@ bool sudoku_esCeldaVacia(Tablero t, int f, int c) {
 	return t[f][c] == 0;
 }
 
-void sudoku_vaciarTablero(Tablero &t) {
+//vaciar tablero
+void sudoku_vaciarTablero(Tablero t) {
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
 			t[i][j] = 0;
@@ -65,27 +66,51 @@ int * primerCeldaVacia(Tablero t) {
   return celda;
 }
 
+//int sudoku_primerCeldaVaciaFila(Tablero t) {
+//  int *fila;
+//  fila = primerCeldaVacia(t);
+//  return fila[0];
+//}
+//
+//int sudoku_primerCeldaVaciaColumna(Tablero t) {
+//  int *columna;
+//  columna = primerCeldaVacia(t);
+//  return columna[1];
+//}
+
 int sudoku_primerCeldaVaciaFila(Tablero t) {
-	int *fila;
-  fila = primerCeldaVacia(t);
-  return fila[0];
+  int fila = -1;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (t[i][j] == 0 && fila == -1) {
+        fila = i;
+      }
+    }
+  }
+  return fila;
 }
 
 int sudoku_primerCeldaVaciaColumna(Tablero t) {
-	int *columna;
-  columna = primerCeldaVacia(t);
-  return columna[1];
+  int columna = -1;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (t[i][j] == 0 && columna == -1) {
+        columna = j;
+      }
+    }
+  }
+  return columna;
 }
 
 int sudoku_valorEnCelda(Tablero t, int f, int c) {
 	return t[f][c];
 }
 
-void sudoku_llenarCelda(Tablero& t, int f, int c, int v) {
+void sudoku_llenarCelda(Tablero t, int f, int c, int v) {
 	t[f][c] = v;
 }
 
-void sudoku_vaciarCelda(Tablero& t, int f, int c) {
+void sudoku_vaciarCelda(Tablero t, int f, int c) {
 	t[f][c] = 0;
 }
 
@@ -93,7 +118,7 @@ bool sudoku_esTableroValido(Tablero t) {
   bool valido = true;
 	for (int i = 0; i < 9; i++) {
 	  for (int j = 0; j < 9; j++) {
-	    if (t[i][j] > 9) {
+	    if (t[i][j] > 9 || t[i][j] < 0) {
 	      valido = false;
 	    }
 	  }
@@ -190,10 +215,91 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
 	return celdasDiferentes == 0;
 }
 
-void copiarTablero(Tablero t, Tablero& s){
+void copiarTablero(Tablero t, Tablero s){
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
 			s[i][j] = t[i][j];
 		}
 	}
+}
+
+bool resolviendo(Tablero t){
+
+	if (sudoku_esTableroTotalmenteResuelto(t))
+		return true;
+	if (sudoku_esTableroParcialmenteResuelto(t) == false)
+		return false;
+
+	for (int f = 0; f < 9; f++) {
+		for (int c = 0; c < 9; c++) {
+			if (t[f][c] == 0) {
+				for (int v = 1; v < 10; v++) {
+					sudoku_llenarCelda(t, f, c, v);
+
+					if (resolviendo(t) == true) {
+						return true;
+					} else {
+						sudoku_vaciarCelda(t, f, c);
+					}
+				}
+				if (t[f][c] == 0) {
+					return false;
+				}
+			}
+		}
+	}
+}
+
+bool sudoku_resolver(Tablero t){
+	Tablero tableroTemp;
+	copiarTablero(t,tableroTemp);
+	if (resolviendo(t) == false)
+		copiarTablero(tableroTemp, t);
+
+	return (sudoku_esTableroTotalmenteResuelto(t));
+}
+
+bool sudoku_tieneSolucion(Tablero t){
+	Tablero tableroTemp;
+	copiarTablero(t,tableroTemp);
+	return sudoku_resolver(tableroTemp);
+}
+
+bool resolviendoCount(Tablero t, int& count){
+
+		if (sudoku_esTableroTotalmenteResuelto(t))
+			return true;
+		if (sudoku_esTableroParcialmenteResuelto(t) != true)
+			return false;
+
+		for (int f = 0; f < 9; f++) {
+			for (int c = 0; c < 9; c++) {
+				if (t[f][c] == 0) {
+					for (int v = 1; v < 10; v++) {
+						sudoku_llenarCelda(t, f, c, v);
+						count++;
+
+						if (resolviendoCount(t, count) == true) {
+							return true;
+						} else {
+							sudoku_vaciarCelda(t, f, c);
+							count++;
+						}
+					}
+					if (t[f][c] == 0) {
+						return false;
+					}
+				}
+			}
+		}
+		return sudoku_esTableroTotalmenteResuelto(t);
+}
+
+bool sudoku_resolver(Tablero t, int& count) {
+	Tablero tableroTemp;
+	copiarTablero(t,tableroTemp);
+	if (resolviendoCount(t, count) == false)
+		copiarTablero(tableroTemp, t);
+
+	return (sudoku_esTableroTotalmenteResuelto(t));
 }
