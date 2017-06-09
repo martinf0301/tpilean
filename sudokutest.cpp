@@ -30,7 +30,8 @@ bool sudoku_esCeldaVacia(Tablero t, int f, int c) {
 	return t[f][c] == 0;
 }
 
-void sudoku_vaciarTablero(Tablero &t) {
+//vaciar tablero
+void sudoku_vaciarTablero(Tablero t) {
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
 			t[i][j] = 0;
@@ -190,7 +191,7 @@ bool sudoku_esSubTablero(Tablero t0, Tablero t1) {
 	return celdasDiferentes == 0;
 }
 
-void copiarTablero(Tablero t, Tablero& s){
+void copiarTablero(Tablero t, Tablero s){
 	for (int i = 0; i < 9; i++){
 		for (int j = 0; j < 9; j++){
 			s[i][j] = t[i][j];
@@ -210,11 +211,18 @@ bool resolviendo(Tablero t){
 				if (t[f][c] == 0) {
 					for (int v = 1; v < 10; v++) {
 						sudoku_llenarCelda(t, f, c, v);
+
+						system("clear");
+						sudoku_print(t);
+
 						if (resolviendo(t) == true) {
 							return true;
 						} else {
 							sudoku_vaciarCelda(t, f, c);
 						}
+					}
+					if (t[f][c] == 0) {
+						return false;
 					}
 				}
 			}
@@ -222,10 +230,9 @@ bool resolviendo(Tablero t){
 		return sudoku_esTableroTotalmenteResuelto(t);
 }
 
-bool sudoku_resolver(Tablero &t){
+bool sudoku_resolver(Tablero t){
 	Tablero tableroTemp;
 	copiarTablero(t,tableroTemp);
-	resolviendo(t);
 	if (resolviendo(t) == false)
 		copiarTablero(tableroTemp, t);
 
@@ -254,9 +261,34 @@ int main(int argc, char const *argv[]) {
  									{9,8,1,3,4,5,2,0,6},
  									{0,7,4,9,6,2,8,1,5}};
 
-	sudoku_print(test);
-	sudoku_resolver(test);
+	Tablero testguacho =  {{0,0,0,0,0,0,0,0,0},
+												{2,9,0,8,5,7,4,3,1},
+												{0,1,7,2,9,3,6,5,0},
+												{5,6,0,1,3,4,0,8,2},
+												{0,2,3,6,0,0,5,4,9},
+												{7,4,8,0,2,9,1,0,3},
+												{6,5,0,7,8,1,3,0,4},
+												{9,8,1,3,0,5,2,0,6},
+												{0,0,4,9,6,2,0,0,7}};
+
+	Tablero testguacho0 =  {{9,8,7,6,5,4,3,2,1},
+												{0,0,0,0,0,3,0,8,5},
+												{0,0,1,0,2,0,0,0,0},
+												{0,0,0,5,0,7,0,0,0},
+												{0,0,4,0,0,0,1,0,0},
+												{0,9,0,0,0,0,0,0,0},
+												{5,0,0,0,0,0,0,7,3},
+												{0,0,2,0,1,0,0,0,0},
+												{0,0,0,0,4,0,0,0,9}};
+
+	sudoku_print(testguacho);
+	sudoku_resolver(testguacho);
 	std::cout << "" << '\n';
-	sudoku_print(test);
+	sudoku_print(testguacho);
+	std::cout << "" << '\n';
+	std::cout << "Es tablero valido " << sudoku_esTableroValido(testguacho) << '\n';
+	std::cout << "Es tablero parcialmente resuelto " << sudoku_esTableroParcialmenteResuelto(testguacho) << '\n';
+	std::cout << "Es tablero resuelto " << sudoku_esTableroTotalmenteResuelto(testguacho) << '\n';
+	std::cout << "Celdas vacias " << sudoku_nroDeCeldasVacias(testguacho) << '\n';
   return 0;
 }
