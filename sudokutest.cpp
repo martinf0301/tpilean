@@ -51,32 +51,55 @@ int sudoku_nroDeCeldasVacias(Tablero t) {
 	return total;
 }
 
-int * primerCeldaVacia(Tablero t) {
-  static int celda [2] = {-1,-1};
-  bool primera = true;
+// int * primerCeldaVacia(Tablero t) {
+//   static int celda [2] = {-1,-1};
+//   bool primera = true;
+//   for (int i = 0; i < 9; i++) {
+//     for (int j = 0; j < 9; j++) {
+//       if (t[i][j] == 0 && primera == true) {
+//         celda[0] = i;
+//         celda[1] = j;
+//         primera = false;
+//       }
+//     }
+//   }
+//   return celda;
+// }
+
+// int sudoku_primerCeldaVaciaFila(Tablero t) {
+// 	int *fila;
+//   fila = primerCeldaVacia(t);
+//   return fila[0];
+// }
+
+// int sudoku_primerCeldaVaciaColumna(Tablero t) {
+// 	int *columna;
+//   columna = primerCeldaVacia(t);
+//   return columna[1];
+// }
+
+int sudoku_primerCeldaVaciaFila(Tablero t) {
+	int fila = -1;
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
-      if (t[i][j] == 0 && primera == true) {
-        celda[0] = i;
-        celda[1] = j;
-        primera = false;
+      if (t[i][j] == 0 && fila == -1) {
+        fila = i;
       }
     }
   }
-  return celda;
-}
-
-int sudoku_primerCeldaVaciaFila(Tablero t) {
-	int *fila;
-  fila = primerCeldaVacia(t);
-  return fila[0];
+  return fila;
 }
 
 int sudoku_primerCeldaVaciaColumna(Tablero t) {
-	int *columna;
-  columna = primerCeldaVacia(t);
-  return columna[1];
-}
+	int columna = -1;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (t[i][j] == 0 && columna == -1) {
+        columna = i;
+      }
+    }
+  }
+  return columna;
 
 int sudoku_valorEnCelda(Tablero t, int f, int c) {
 	return t[f][c];
