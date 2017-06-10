@@ -4,25 +4,30 @@ using namespace std;
 typedef int Tablero[9][9];
 
 void sudoku_print(Tablero t) {
-	cout << "-------------------";
-	cout << endl;
 	for (int i = 0; i < 9; i++) {
-		cout << "|";
+		cout << " ";
+		if (i % 3 == 0) {
+			cout << "";
+		}
 		for (int j = 0; j < 9; j++) {
+			if (j == 3 || j == 6) {
+				cout << "| ";
+			}
 			if (t[i][j] == 0) {
-				cout << " ";
+				cout << "_";
 			} else {
 				cout << t[i][j];
 			}
-			cout << "|";
+			cout << " ";
 		}
 		cout << endl;
 		if (i == 8) {
-			cout << "+-+-+-+-+-+-+-+-+-+";
-		} else {
-			cout << "-------------------";
+		} else if (i == 2 || i == 5) {
+			cout << "----------------------";
 		}
-		cout << endl;
+		if (i == 2 || i == 5) {
+			cout << endl;
+		}
 	}
 }
 
