@@ -30,76 +30,48 @@ bool sudoku_esCeldaVacia(Tablero t, int f, int c) {
 	return t[f][c] == 0;
 }
 
-//vaciar tablero
 void sudoku_vaciarTablero(Tablero t) {
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
 			t[i][j] = 0;
 		}
 	}
 }
 
 int sudoku_nroDeCeldasVacias(Tablero t) {
-  int total = 0;
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      if (t[i][j] == 0) {
-        total++;
-      }
-    }
-  }
+	int total = 0;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			if (t[i][j] == 0) {
+				total++;
+			}
+		}
+	}
 	return total;
 }
 
-int * primerCeldaVacia(Tablero t) {
-  static int celda [2] = {-1,-1};
-  bool primera = true;
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      if (t[i][j] == 0 && primera == true) {
-        celda[0] = i;
-        celda[1] = j;
-        primera = false;
-      }
-    }
-  }
-  return celda;
-}
-
-//int sudoku_primerCeldaVaciaFila(Tablero t) {
-//  int *fila;
-//  fila = primerCeldaVacia(t);
-//  return fila[0];
-//}
-//
-//int sudoku_primerCeldaVaciaColumna(Tablero t) {
-//  int *columna;
-//  columna = primerCeldaVacia(t);
-//  return columna[1];
-//}
-
 int sudoku_primerCeldaVaciaFila(Tablero t) {
-  int fila = -1;
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      if (t[i][j] == 0 && fila == -1) {
-        fila = i;
-      }
-    }
-  }
-  return fila;
+	int fila = -1;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			if (t[i][j] == 0 && fila == -1) {
+				fila = i;
+			}
+		}
+	}
+	return fila;
 }
 
 int sudoku_primerCeldaVaciaColumna(Tablero t) {
-  int columna = -1;
-  for (int i = 0; i < 9; i++) {
-    for (int j = 0; j < 9; j++) {
-      if (t[i][j] == 0 && columna == -1) {
-        columna = j;
-      }
-    }
-  }
-  return columna;
+	int columna = -1;
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			if (t[i][j] == 0 && columna == -1) {
+				columna = j;
+			}
+		}
+	}
+	return columna;
 }
 
 int sudoku_valorEnCelda(Tablero t, int f, int c) {
@@ -115,18 +87,16 @@ void sudoku_vaciarCelda(Tablero t, int f, int c) {
 }
 
 bool sudoku_esTableroValido(Tablero t) {
-  bool valido = true;
+	bool valido = true;
 	for (int i = 0; i < 9; i++) {
-	  for (int j = 0; j < 9; j++) {
-	    if (t[i][j] > 9 || t[i][j] < 0) {
-	      valido = false;
-	    }
-	  }
+		for (int j = 0; j < 9; j++) {
+			if (t[i][j] > 9 || t[i][j] < 0) {
+				valido = false;
+			}
+		}
 	}
 	return valido;
 }
-
-// start funciones auxiliares para esTableroParcialmenteResuelto
 
 int cantidadRepetidos(int l[]){
 	int result = 0;
@@ -182,9 +152,9 @@ bool sudoku_sonRegionesParcialmenteResueltas(Tablero t) {
 
 bool sudoku_esTableroParcialmenteResuelto(Tablero t) {
 	return (sudoku_esTableroValido(t) &&
-          sudoku_esFilaParcialmenteResuelto(t) &&
-          sudoku_esColumnaParcialmenteResuelto(t) &&
-          sudoku_sonRegionesParcialmenteResueltas(t));
+			sudoku_esFilaParcialmenteResuelto(t) &&
+			sudoku_esColumnaParcialmenteResuelto(t) &&
+			sudoku_sonRegionesParcialmenteResueltas(t));
 }
 
 bool sudoku_noHayCeldasVacias(Tablero t) {
@@ -267,32 +237,31 @@ bool sudoku_tieneSolucion(Tablero t){
 
 bool resolviendoCount(Tablero t, int& count){
 
-		if (sudoku_esTableroTotalmenteResuelto(t))
-			return true;
-		if (sudoku_esTableroParcialmenteResuelto(t) != true)
-			return false;
+	if (sudoku_esTableroTotalmenteResuelto(t))
+		return true;
+	if (sudoku_esTableroParcialmenteResuelto(t) != true)
+		return false;
 
-		for (int f = 0; f < 9; f++) {
-			for (int c = 0; c < 9; c++) {
-				if (t[f][c] == 0) {
-					for (int v = 1; v < 10; v++) {
-						sudoku_llenarCelda(t, f, c, v);
+	for (int f = 0; f < 9; f++) {
+		for (int c = 0; c < 9; c++) {
+			if (t[f][c] == 0) {
+				for (int v = 1; v < 10; v++) {
+					sudoku_llenarCelda(t, f, c, v);
+					count++;
+
+					if (resolviendoCount(t, count) == true) {
+						return true;
+					} else {
+						sudoku_vaciarCelda(t, f, c);
 						count++;
-
-						if (resolviendoCount(t, count) == true) {
-							return true;
-						} else {
-							sudoku_vaciarCelda(t, f, c);
-							count++;
-						}
 					}
-					if (t[f][c] == 0) {
-						return false;
-					}
+				}
+				if (t[f][c] == 0) {
+					return false;
 				}
 			}
 		}
-		return sudoku_esTableroTotalmenteResuelto(t);
+	}
 }
 
 bool sudoku_resolver(Tablero t, int& count) {

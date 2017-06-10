@@ -102,9 +102,7 @@ bool sudoku_resolver(Tablero t, int& count);
  */
 void sudoku_print(Tablero t);
 
-//aux
-
-int * primerCeldaVacia(Tablero t);
+//funciones auxiliares
 
 int cantidadRepetidos(int l[]);
 
